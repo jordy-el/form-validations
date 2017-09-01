@@ -92,3 +92,11 @@ label {
 span {
     margin: 0.6rem 0;
 }
+
+.invalid {
+    border: 1px solid orangered;
+}
+
+.valid {
+    border: 1px solid greenyellow;
+}
