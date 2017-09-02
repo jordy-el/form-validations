@@ -57,11 +57,23 @@ function handleValidationMessage(array) {
 
 function main() {
 
-  //Initialize jquery nodes for each input element
+  // Declare validation function
+  const handleValidation = () => {
+    checkQueue.forEach((validation) => {
+      const $check = validation();
+      handleValidationClass($check);
+      handleValidationMessage($check);
+    })
+  };
+
+  // Initialize jquery nodes for each input element
   const $email = $('#email');
   const $confirmEmail = $('#confirm-email');
   const $password = $('#password');
   const $confirmPassword = $('#confirm-password');
+
+  // Initialize jquery node for all input elements
+  const $input = $('input');
 
   // Initialize tooltips for inputs
   $('input[title]').qtip({
@@ -88,18 +100,24 @@ function main() {
   // Initialize queue for validations
   let checkQueue = [];
 
-  // Add focusout handlers for pushing input elements into validation array
+  // Add focusout/keyup handlers for pushing input elements into validation array
   $email.focusout(() => { if (!email) checkQueue.push(validateEmail); email = true });
+  $confirmEmail.keyup(() => { if (!confirmEmail) checkQueue.push(validateEmailConfirmation); confirmEmail = true });
   $confirmEmail.focusout(() => { if (!confirmEmail) checkQueue.push(validateEmailConfirmation); confirmEmail = true });
   $password.focusout(() => { if (!password) checkQueue.push(validatePassword); password = true });
+  $confirmPassword.keyup(() => { if (!confirmPassword) checkQueue.push(validatePasswordConfirmation); confirmPassword = true });
   $confirmPassword.focusout(() => { if (!confirmPassword) checkQueue.push(validatePasswordConfirmation); confirmPassword = true });
 
   // Validate all in queue on focusout anywhere
-  $('input').focusout(() => { checkQueue.forEach((validation) => {
-    const $check = validation();
-    handleValidationClass($check);
-    handleValidationMessage($check);
-  }); });
+  $input.focusout(handleValidation);
 
-  // TODO Implement keyup validations
+  // Validate all in queue on keyup anywhere
+  $input.keyup(handleValidation);
+
+  // Block form submission unless all inputs are valid
+  $('#signup-form').submit(() => {
+    if ($('input.valid').length !== 4) {
+      return false;
+    }
+  });
 }
