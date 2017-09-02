@@ -39,6 +39,7 @@ textarea {
     display: flex;
     align-items: flex-start;
     justify-content: space-around;
+    margin: 5rem;
 }
 
 fieldset > * {
@@ -148,4 +149,19 @@ fieldset > span {
 
 .tooltip {
     font-size: 1rem;
+}
+
+#password-list {
+    margin: 0 0 -1rem -0.4rem;
+    list-style-type: none;
+    width: 75%;
+}
+
+#password-list > li {
+    font-size: 0.8rem;
+    color: orangered;
+}
+
+.password-valid {
+    color: #11ce00 !important;
 }

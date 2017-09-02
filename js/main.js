@@ -25,6 +25,21 @@ function validatePassword() {
   return [valid, $password];
 }
 
+function validatePasswordWhileTyping() {
+  const password = $('#password')[0].value;
+  const lowerCaseRegex = /[a-z]+/;
+  const upperCaseRegex = /[A-Z]+/;
+  const numberRegex = /[0-9]+/;
+  const symbolRegex = /[!@#\$%\^&\*]+/;
+  return {
+    lower: lowerCaseRegex.test(password),
+    upper: upperCaseRegex.test(password),
+    number: numberRegex.test(password),
+    symbol: symbolRegex.test(password),
+    length: password.length >= 8
+  }
+}
+
 function validatePasswordConfirmation() {
   const $password = $('#password');
   const $passwordConfirmation = $('#confirm-password');
@@ -91,6 +106,9 @@ function main() {
   // Hide error messages initially
   $('fieldset > span').hide();
 
+  // Hide password validity list initially
+  $('#password-list').hide();
+
   // Initialize booleans to prevent overfilling queue array
   let email = false;
   let confirmEmail = false;
@@ -104,9 +122,51 @@ function main() {
   $email.focusout(() => { if (!email) checkQueue.push(validateEmail); email = true });
   $confirmEmail.keyup(() => { if (!confirmEmail) checkQueue.push(validateEmailConfirmation); confirmEmail = true });
   $confirmEmail.focusout(() => { if (!confirmEmail) checkQueue.push(validateEmailConfirmation); confirmEmail = true });
+  $password.keyup(() => { if (!password) checkQueue.push(validatePassword); password = true });
   $password.focusout(() => { if (!password) checkQueue.push(validatePassword); password = true });
   $confirmPassword.keyup(() => { if (!confirmPassword) checkQueue.push(validatePasswordConfirmation); confirmPassword = true });
   $confirmPassword.focusout(() => { if (!confirmPassword) checkQueue.push(validatePasswordConfirmation); confirmPassword = true });
+
+  // Validate password while typing
+  $password.focusin(() => {
+    $('#password-list').animate({ height: 'toggle' }, 400);
+  });
+  $password.focusout(() => {
+    $('#password-list').animate({ height: 'toggle' }, 400);
+  });
+  $password.keyup(() => {
+    const passwordValidity = validatePasswordWhileTyping();
+    const $lowerCase = $('#lower-case');
+    const $upperCase = $('#upper-case');
+    const $number = $('#number');
+    const $symbol = $('#symbol');
+    const $passwordLength = $('#password-length');
+    if ($lowerCase.hasClass('password-valid') && !passwordValidity.lower) {
+      $lowerCase.removeClass('password-valid');
+    } else if (!$lowerCase.hasClass('password-valid') && passwordValidity.lower) {
+      $lowerCase.addClass('password-valid');
+    }
+    if ($upperCase.hasClass('password-valid') && !passwordValidity.upper) {
+      $upperCase.removeClass('password-valid');
+    } else if (!$upperCase.hasClass('password-valid') && passwordValidity.upper) {
+      $upperCase.addClass('password-valid');
+    }
+    if ($number.hasClass('password-valid') && !passwordValidity.number) {
+      $number.removeClass('password-valid');
+    } else if (!$number.hasClass('password-valid') && passwordValidity.number) {
+      $number.addClass('password-valid');
+    }
+    if ($symbol.hasClass('password-valid') && !passwordValidity.symbol) {
+      $symbol.removeClass('password-valid');
+    } else if (!$symbol.hasClass('password-valid') && passwordValidity.symbol) {
+      $symbol.addClass('password-valid');
+    }
+    if ($passwordLength.hasClass('password-valid') && !passwordValidity.length) {
+      $passwordLength.removeClass('password-valid');
+    } else if (!$passwordLength.hasClass('password-valid') && passwordValidity.length) {
+      $passwordLength.addClass('password-valid');
+    }
+  });
 
   // Validate all in queue on focusout anywhere
   $input.focusout(handleValidation);
