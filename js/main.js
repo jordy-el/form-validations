@@ -34,21 +34,42 @@ function validatePasswordConfirmation() {
   return [$password[0].value === $passwordConfirmation[0].value, $passwordConfirmation];
 }
 
+function handleValidationClass(array) {
+  const valid = array[0];
+  const $element = array[1];
+  if ($element.hasClass('valid') && !valid) {
+    $element.removeClass('valid');
+    $element.addClass('invalid');
+  } else if ($element.hasClass('invalid') && valid) {
+    $element.removeClass('invalid');
+    $element.addClass('valid');
+  } else {
+    $element.addClass(validationClass(valid));
+  }
+}
+
 function main() {
 
+  // Initialize booleans to prevent overfilling queue array
+  let email = false;
+  let confirmEmail = false;
+  let phone = false;
+  let password = false;
+  let confirmPassword = false;
+
   // Initialize queue for validations
-  const checkQueue = [];
+  let checkQueue = [];
 
   // Add focusout handlers for pushing input elements into validation array
-  $('#email').focusout(() => { checkQueue.push(validateEmail) });
-  $('#confirm-email').focusout(() => { checkQueue.push(validateEmailConfirmation) });
-  $('#phone').focusout(() => { checkQueue.push(validatePhone) });
-  $('#password').focusout(() => { checkQueue.push(validatePassword) });
-  $('#confirm-password').focusout(() => { checkQueue.push(validatePasswordConfirmation) });
+  $('#email').focusout(() => { if (!email) checkQueue.push(validateEmail); email = true });
+  $('#confirm-email').focusout(() => { if (!confirmEmail) checkQueue.push(validateEmailConfirmation); confirmEmail = true });
+  $('#phone').focusout(() => { if (!phone) checkQueue.push(validatePhone); phone = true });
+  $('#password').focusout(() => { if (!password) checkQueue.push(validatePassword); password = true });
+  $('#confirm-password').focusout(() => { if (!confirmPassword) checkQueue.push(validatePasswordConfirmation); confirmPassword = true });
 
   // Validate all in queue
   $('input').focusout(() => { checkQueue.forEach((validation) => {
-    const $valid = validation();
-    console.log($valid);
+    const $check = validation();
+    handleValidationClass($check);
   }); });
 }

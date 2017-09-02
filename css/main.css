@@ -78,10 +78,16 @@ input[type=submit] {
     border-radius: 3px;
     color: white;
     background-color: deepskyblue;
+    padding: 5px;
+    font-size: 0.8rem;
+}
+
+input[type=submit]:active {
+    color: rgba(255, 255, 255, 0.71);
 }
 
 input[type=checkbox] {
-    margin: 1rem 0;
+    margin: 1rem 0.5rem 1rem 0;
 }
 
 label {
@@ -94,9 +100,42 @@ span {
 }
 
 .invalid {
-    border: 1px solid orangered;
+    border: 1px solid orangered !important;
 }
 
 .valid {
-    border: 1px solid greenyellow;
+    border: 1px solid yellowgreen !important;
+}
+
+a {
+    text-decoration: none;
+    color: deepskyblue !important;
+}
+
+#next-to-form {
+    border-left: 1px solid #aaa;
+    padding-left: 1.5rem;
+    height: 30rem;
+    margin-top: 0.7rem;
+}
+
+#next-to-form > h3 {
+    margin-top: 0 !important;
+    margin-left: 0 !important;
+    margin-bottom: 0 !important;
+}
+
+ul {
+    padding: 0.5rem;
+    margin-top: 0;
+}
+
+li {
+    color: #777;
+    margin-bottom: 1rem;
+}
+
+li > a {
+    color: #444 !important;
+    text-decoration: underline !important;
 }
