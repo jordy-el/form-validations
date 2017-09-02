@@ -18,14 +18,11 @@ function validateEmailConfirmation() {
   return [$email[0].value === $emailConfirmation[0].value, $emailConfirmation];
 }
 
-function validatePhone() {
-  const $phone = $('#phone');
-  return [$phone[0].value !== '', $phone];
-}
-
 function validatePassword() {
   const $password = $('#password');
-  return [$password[0].value.length > 6, $password];
+  const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/;
+  const valid = (passwordRegex.test($password[0].value));
+  return [valid, $password];
 }
 
 function validatePasswordConfirmation() {
@@ -48,12 +45,43 @@ function handleValidationClass(array) {
   }
 }
 
+function handleValidationMessage(array) {
+  const valid = array[0];
+  const $element = array[1];
+  if (valid) {
+    $element.next('span').hide();
+  } else if (!valid) {
+    $element.next('span').show();
+  }
+}
+
 function main() {
+
+  //Initialize jquery nodes for each input element
+  const $email = $('#email');
+  const $confirmEmail = $('#confirm-email');
+  const $password = $('#password');
+  const $confirmPassword = $('#confirm-password');
+
+  // Initialize tooltips for inputs
+  $('input[title]').qtip({
+    position: {
+      my: 'center left',
+      at: 'center right'
+    },
+    style: {
+      classes: 'qtip-dark',
+    },
+    show: 'focus',
+    hide: 'blur'
+  });
+
+  // Hide error messages initially
+  $('fieldset > span').hide();
 
   // Initialize booleans to prevent overfilling queue array
   let email = false;
   let confirmEmail = false;
-  let phone = false;
   let password = false;
   let confirmPassword = false;
 
@@ -61,15 +89,17 @@ function main() {
   let checkQueue = [];
 
   // Add focusout handlers for pushing input elements into validation array
-  $('#email').focusout(() => { if (!email) checkQueue.push(validateEmail); email = true });
-  $('#confirm-email').focusout(() => { if (!confirmEmail) checkQueue.push(validateEmailConfirmation); confirmEmail = true });
-  $('#phone').focusout(() => { if (!phone) checkQueue.push(validatePhone); phone = true });
-  $('#password').focusout(() => { if (!password) checkQueue.push(validatePassword); password = true });
-  $('#confirm-password').focusout(() => { if (!confirmPassword) checkQueue.push(validatePasswordConfirmation); confirmPassword = true });
+  $email.focusout(() => { if (!email) checkQueue.push(validateEmail); email = true });
+  $confirmEmail.focusout(() => { if (!confirmEmail) checkQueue.push(validateEmailConfirmation); confirmEmail = true });
+  $password.focusout(() => { if (!password) checkQueue.push(validatePassword); password = true });
+  $confirmPassword.focusout(() => { if (!confirmPassword) checkQueue.push(validatePasswordConfirmation); confirmPassword = true });
 
-  // Validate all in queue
+  // Validate all in queue on focusout anywhere
   $('input').focusout(() => { checkQueue.forEach((validation) => {
     const $check = validation();
     handleValidationClass($check);
+    handleValidationMessage($check);
   }); });
+
+  // TODO Implement keyup validations
 }

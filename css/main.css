@@ -139,3 +139,13 @@ li > a {
     color: #444 !important;
     text-decoration: underline !important;
 }
+
+fieldset > span {
+    color: orangered !important;
+    margin: 0.3rem 0;
+    font-size: 0.9rem;
+}
+
+.tooltip {
+    font-size: 1rem;
+}

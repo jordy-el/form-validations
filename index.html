@@ -7,29 +7,32 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link href="https://fonts.googleapis.com/css?family=Dosis" rel="stylesheet">
         <link rel="stylesheet" href="css/normalize.css">
+        <link rel="stylesheet" href="http://cdn.jsdelivr.net/qtip2/3.0.3/jquery.qtip.min.css">
         <link rel="stylesheet" href="css/main.css">
     </head>
     <body>
         <div id="container">
             <div id="form">
                 <form id="signup-form">
-                    <fieldset>
+                    <fieldset style="margin-bottom: 0.6rem;">
                         <h1 style="margin: 0; font-weight: 200;">Do a lot of things in a single place</h1>
                         <label for="email">Your Email</label>
-                        <input type="email" id="email">
+                        <input type="email" id="email" title="This will be your user ID.">
+                        <span id="email-error">Please enter a valid email address</span>
                         <label for="confirm-email">Confirm Email</label>
                         <input type="email" id="confirm-email">
-                        <label for="phone">Phone (recommended)</label>
-                        <input type="number" id="phone">
+                        <span id="confirm-email-error">Confirm email does not match email</span>
                         <label for="password">Password</label>
-                        <input type="password" id="password">
+                        <input type="password" id="password" title="Use an easy password. It's what the hackers will least expect.">
+                        <span id="password-error">Password is not valid</span>
                         <label for="confirm-password">Confirm Password</label>
                         <input type="password" id="confirm-password">
+                        <span id="confirm-password-error">Confirm password does not match password</span>
                         <input style="display: inline;" type="checkbox" id="remember-me">
                         <label style="display: inline;" for="remember-me">Remember Me</label>
                         <input type="submit" value="SIGN UP">
-                        <span>By clicking Sign Up you agree to <a href="">sacrifice</a> your <a href="">first born child</a></span>
                     </fieldset>
+                    <span>By clicking Sign Up you agree to <a href="">sacrifice</a> your <a href="">first born child</a></span>
                 </form>
                 <div id="next-to-form">
                     <h3 style="margin: 10px;">Give us money</h3>
@@ -42,7 +45,8 @@
             </div>
         </div>
         <script src="js/vendor/modernizr-3.5.0.min.js"></script>
-        <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+        <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+        <script src="http://cdn.jsdelivr.net/qtip2/3.0.3/jquery.qtip.min.js"></script>
         <script src="js/plugins.js"></script>
         <script src="js/main.js"></script>
     </body>
